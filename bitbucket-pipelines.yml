@@ -6,6 +6,7 @@ pipelines:
   default:
     - parallel:
         - step:
+            size: 2x
             name: Testleri Koşuyoruz
             caches:
               - maven
