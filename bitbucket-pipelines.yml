@@ -12,5 +12,6 @@ pipelines:
             script:
               - mvn clean install
             after-script:
-              - echo $BITBUCKET_EXIT_CODE
-              - if [ BITBUCKET_EXIT_CODE == 0 ]; then  echo "TESTLER ÇALIŞTI"; fi;
+              - BUILD_STATUS="☕️ TESTLER TAMAM 🥰 🤟"
+              - if [[ $BITBUCKET_EXIT_CODE -ne 0 ]]; then BUILD_STATUS=" 👎 HATALI 💩" ; fi
+              - echo "branch durumu -> ${BUILD_STATUS}"
