@@ -1,16 +1,16 @@
 
 
-image: maven:4.0.0
+image: maven:3.6.3
 
 pipelines:
   default:
     - parallel:
-      - step:
-          name: Testleri Koşuyoruz
-          caches:
-            - maven
-          script:
-            - mvn clean install
-          after-script:
-            - echo $BITBUCKET_EXIT_CODE
-            - if [ BITBUCKET_EXIT_CODE == 0 ]; then  echo "TESTLER ÇALIŞTI"; fi;
+        - step:
+            name: Testleri Koşuyoruz
+            caches:
+              - maven
+            script:
+              - mvn clean install
+            after-script:
+              - echo $BITBUCKET_EXIT_CODE
+              - if [ BITBUCKET_EXIT_CODE == 0 ]; then  echo "TESTLER ÇALIŞTI"; fi;
