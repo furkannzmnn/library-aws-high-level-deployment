@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookServiceTest {
     @Test
     void test() throws Exception {
-        throw new Exception("patladım");
+        //throw new Exception("patladım");
     }
 
 }
