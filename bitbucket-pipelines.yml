@@ -7,7 +7,7 @@ pipelines:
     - parallel:
         - step:
             size: 2x
-            name: Testleri Koşuyoruz
+            name: Testleri Koşuyoruzuu
             caches:
               - maven
             script:
