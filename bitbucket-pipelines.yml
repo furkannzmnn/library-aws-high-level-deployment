@@ -13,5 +13,5 @@ pipelines:
               - mvn clean install
             after-script:
               - BUILD_STATUS="☕️ TESTLER TAMAM 🥰 🤟"
-              - if [[ $BITBUCKET_EXIT_CODE -ne 0 ]]; then BUILD_STATUS=" 👎 HATALI 💩" ; fi
+              - if [[ $BITBUCKET_EXIT_CODE -ne 0 ]]; then BUILD_STATUS=" 👎 TESTLER HATALI BRO 💩" ; fi
               - echo "branch durumu -> ${BUILD_STATUS}"
