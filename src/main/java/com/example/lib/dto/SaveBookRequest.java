@@ -2,24 +2,28 @@ package com.example.lib.dto;
 
 import com.example.lib.model.BookStatus;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.File;
 
 @Data
-@SuperBuilder
-@NoArgsConstructor
-public class BookResponse {
-    private Long id;
+public final class SaveBookRequest {
+
+    @NotBlank
     private String title;
+    @NotBlank
     private String authorName;
+    @NotNull
     private BookStatus bookStatus;
+    @NotBlank
     private String publisher;
+    @NotNull
     private Integer lastPageNumber;
     private File image;
+    @NotNull
     private Long categoryId;
+    @NotNull
     private Integer totalPage;
-    private String imageUrl;
-
 }

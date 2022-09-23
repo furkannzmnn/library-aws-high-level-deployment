@@ -1,10 +1,6 @@
-image: maven:3.6.3
-
 pipelines:
   default:
     - step:
         name: Testleri koşuyoruz
-        caches:
-          - maven
         script:
-          - mvn clean install
+          - echo "testler tamam"
