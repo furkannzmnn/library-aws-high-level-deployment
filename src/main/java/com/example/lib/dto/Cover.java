@@ -1,4 +1,4 @@
-package com.example.lib.service;
+package com.example.lib.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
