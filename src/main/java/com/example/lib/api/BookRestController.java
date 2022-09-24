@@ -32,24 +32,24 @@ public class BookRestController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BookResponse>> listBook(@RequestParam(name = "size") int size, @RequestParam(name = "page") int page ) {
-        return ResponseEntity.ok(bookListService.listBooks(size, page));
+    public ResponseEntity<List<BookResponse>> listBook(@RequestParam(name = "size") int size, @RequestParam(name = "page") int page, @RequestParam(name = "userId") Long userId) {
+        return ResponseEntity.ok(bookListService.listBooks(size, page, userId));
     }
 
 
-    @GetMapping("/list/{categoryType}")
+    @GetMapping("/search/{categoryType}")
     public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable CategoryType categoryType) {
         return ResponseEntity.ok(this.bookListService.searchByCategory(categoryType));
     }
 
 
-    @GetMapping("/list/{status}")
+    @GetMapping("/{status}")
     public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable BookStatus status) {
         return ResponseEntity.ok(this.bookListService.searchBookStatus(status));
     }
 
     @GetMapping("/list/{title}")
-    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable String title) {
+    public ResponseEntity<List<BookResponse>> listByTitle(@PathVariable String title) {
         return ResponseEntity.ok(this.bookListService.searchByTitle(title));
     }
 

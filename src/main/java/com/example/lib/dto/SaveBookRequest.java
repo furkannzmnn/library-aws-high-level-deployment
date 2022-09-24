@@ -26,4 +26,5 @@ public final class SaveBookRequest {
     private Long categoryId;
     @NotNull
     private Integer totalPage;
+    private Long userId;
 }

@@ -6,7 +6,7 @@ import com.example.lib.model.Book;
 import com.example.lib.model.Category;
 import com.example.lib.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,16 +18,18 @@ public class BookSaveService {
     private final CategoryService categoryService;
 
     @Transactional
-    public BookListItemResponse saveBook(SaveBookRequest saveBookRequest) {
-        Category category = categoryService.loadCategory(saveBookRequest.getCategoryId());
+    @CacheEvict(key = "'saveBook_' + #request.userId", value = "bookList")
+    public BookListItemResponse saveBook(SaveBookRequest request) {
+        Category category = categoryService.loadCategory(request.getCategoryId());
         final Book book = Book.builder()
                 .category(category)
-                .bookStatus(saveBookRequest.getBookStatus())
-                .title(saveBookRequest.getTitle())
-                .publisher(saveBookRequest.getPublisher())
-                .lastPageNumber(saveBookRequest.getLastPageNumber())
-                .authorName(saveBookRequest.getAuthorName())
-                .totalPage(saveBookRequest.getTotalPage())
+                .bookStatus(request.getBookStatus())
+                .title(request.getTitle())
+                .publisher(request.getPublisher())
+                .lastPageNumber(request.getLastPageNumber())
+                .authorName(request.getAuthorName())
+                .totalPage(request.getTotalPage())
+                .userId(request.getUserId())
                 .build();
 
         final Book fromDb = bookRepository.save(book);
@@ -40,10 +42,9 @@ public class BookSaveService {
                 .totalPage(fromDb.getTotalPage())
                 .lastPageNumber(fromDb.getLastPageNumber())
                 .title(fromDb.getTitle())
+                .userId(fromDb.getUserId())
                 .build();
     }
-
-
 
 
 }

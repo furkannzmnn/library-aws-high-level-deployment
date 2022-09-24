@@ -18,4 +18,5 @@ public class BookListItemResponse {
     private File image;
     private String categoryName;
     private Integer totalPage;
+    private Long userId;
 }
