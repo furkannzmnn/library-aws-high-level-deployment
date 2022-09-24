@@ -8,6 +8,7 @@ import com.example.lib.model.Book;
 import com.example.lib.model.Category;
 import com.example.lib.model.Image;
 import com.example.lib.repository.BookRepository;
+import com.example.lib.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.cache.annotation.CacheEvict;
@@ -22,6 +23,7 @@ import javax.transaction.Transactional;
 public class BookSaveService {
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
+    private final ImageRepository imageRepository;
 
     @Transactional
     @Caching(evict = {
@@ -65,7 +67,7 @@ public class BookSaveService {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.BOOK_NOT_FOUND).build());
         final Image image = book.getImage();
         if (image == null) {
-            book.setImage(Image.builder().imageUrl(imageUrl).build());
+            book.setImage(imageRepository.save(Image.builder().imageUrl(imageUrl).build()));
         } else {
             image.setImageUrl(imageUrl);
         }
