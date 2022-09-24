@@ -53,4 +53,10 @@ public class BookRestController {
         return ResponseEntity.ok(this.bookListService.searchByTitle(title));
     }
 
+    @DeleteMapping("/delete/{bookId}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        bookSaveService.deleteBook(bookId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

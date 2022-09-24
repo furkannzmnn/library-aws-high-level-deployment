@@ -1,13 +1,18 @@
 package com.example.lib.service;
 
 import com.example.lib.dto.BookListItemResponse;
+import com.example.lib.dto.ErrorCode;
 import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.exception.GenericException;
 import com.example.lib.model.Book;
 import com.example.lib.model.Category;
+import com.example.lib.model.Image;
 import com.example.lib.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -50,5 +55,21 @@ public class BookSaveService {
                 .build();
     }
 
+    public void deleteBook(Long bookId) {
+        bookRepository.deleteById(bookId);
+    }
+
+    @Transactional
+    @Async
+    public void saveImage(Long bookId, String imageUrl) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.BOOK_NOT_FOUND).build());
+        final Image image = book.getImage();
+        if (image == null) {
+            book.setImage(Image.builder().imageUrl(imageUrl).build());
+        } else {
+            image.setImageUrl(imageUrl);
+        }
+        bookRepository.save(book);
+    }
 
 }

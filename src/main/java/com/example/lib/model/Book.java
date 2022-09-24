@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Table(name = "book")
 @Getter
 @Builder
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book extends BaseEntity {

@@ -1,5 +1,6 @@
 package com.example.lib.api;
 
+import com.example.lib.service.BookSaveService;
 import com.example.lib.service.ImageStoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,14 @@ import java.util.Objects;
 @RequestMapping("/api/v1/bookImage")
 @RequiredArgsConstructor
 public class BookImageRestController {
+    private final BookSaveService bookSaveService;
     private final ImageStoreService imageStoreService;
 
     @PostMapping
     public ResponseEntity<String> uploadImage(@RequestParam("bookId") Long bookId, @RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok(imageStoreService.uploadImg(convert(file), bookId));
+        final String uploadImg = imageStoreService.uploadImg(convert(file), bookId);
+        bookSaveService.saveImage(bookId, uploadImg);
+        return ResponseEntity.ok(uploadImg);
     }
 
     private File convert(final MultipartFile multipartFile) {
