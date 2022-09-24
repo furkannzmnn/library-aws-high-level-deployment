@@ -7,6 +7,8 @@ import com.example.lib.model.Category;
 import com.example.lib.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,7 +20,12 @@ public class BookSaveService {
     private final CategoryService categoryService;
 
     @Transactional
-    @CacheEvict(key = "'saveBook_' + #request.userId", value = "bookList")
+
+
+    @Caching(evict = {
+            @CacheEvict(key = "'saveBook_' + #request.userId", value = "bookList"),
+            @CacheEvict(value = "bookList", key = "'status' + #request.bookStatus + #request.userId")
+    })
     public BookListItemResponse saveBook(SaveBookRequest request) {
         Category category = categoryService.loadCategory(request.getCategoryId());
         final Book book = Book.builder()

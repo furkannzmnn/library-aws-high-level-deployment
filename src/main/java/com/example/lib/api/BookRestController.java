@@ -38,14 +38,14 @@ public class BookRestController {
 
 
     @GetMapping("/search/{categoryType}")
-    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable CategoryType categoryType) {
-        return ResponseEntity.ok(this.bookListService.searchByCategory(categoryType));
+    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable CategoryType categoryType, @RequestParam(name = "userId") Long userId) {
+        return ResponseEntity.ok(this.bookListService.searchByCategory(categoryType, userId));
     }
 
 
     @GetMapping("/{status}")
-    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable BookStatus status) {
-        return ResponseEntity.ok(this.bookListService.searchBookStatus(status));
+    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable BookStatus status, @RequestParam(name = "userId") Long userId) {
+        return ResponseEntity.ok(this.bookListService.searchBookStatus(status, userId));
     }
 
     @GetMapping("/list/{title}")

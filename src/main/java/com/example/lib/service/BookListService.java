@@ -7,6 +7,7 @@ import com.example.lib.model.BookStatus;
 import com.example.lib.model.Category;
 import com.example.lib.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,12 @@ public class BookListService {
                .collect(Collectors.toList());
     }
 
-    public List<BookResponse> searchByCategory(CategoryType categoryType) {
+    @Cacheable(value = "bookList", key = "'saveBook_' + #userId")
+    public List<BookResponse> searchByCategory(CategoryType categoryType, Long userId) {
         final Category category = categoryService.findByName(categoryType.getValue());
         return category.getBooks()
                 .stream()
+                .filter(book -> book.getUserId().equals(userId))
                 .map(BookListService::convertResponse)
                 .collect(Collectors.toList());
     }
@@ -45,13 +48,14 @@ public class BookListService {
     }
 
 
-    public List<BookResponse> searchBookStatus(BookStatus bookStatus) {
-        return bookRepository.findAll(BookSearchSpecification.searchByBookStatus(bookStatus))
+    @Cacheable(value = "bookList", key = "'status' + #bookStatus + #userId")
+    public List<BookResponse> searchBookStatus(BookStatus bookStatus, Long userId) {
+        return bookRepository.findAll(BookSearchSpecification.searchByBookStatus(bookStatus, userId ))
                 .stream()
                 .map(each ->
                     BookResponse.builder()
                             .id(each.getId())
-                            .imageUrl(each.getImage().getImageUrl())
+                            .imageUrl(each.getImage() != null ? each.getImage().getImageUrl() : null)
                             .build())
                 .collect(Collectors.toList());
     }
@@ -72,8 +76,14 @@ public class BookListService {
             return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + value + "%");
         }
 
-        public static Specification<Book> searchByBookStatus(BookStatus bookStatus) {
-            return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("bookStatus"), bookStatus);
+        public static Specification<Book> searchByBookStatus(BookStatus bookStatus, Long userId) {
+            return (root, query, criteriaBuilder) -> {
+                // and query
+                return criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("bookStatus"), bookStatus),
+                        criteriaBuilder.equal(root.get("userId"), userId)
+                );
+            };
         }
 
         public static Specification<Book> searchByUserBooks(Long userId) {
