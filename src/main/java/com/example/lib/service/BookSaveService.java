@@ -19,8 +19,6 @@ public class BookSaveService {
     private final CategoryService categoryService;
 
     @Transactional
-
-
     @Caching(evict = {
             @CacheEvict(key = "'saveBook_' + #request.userId", value = "bookList"),
             @CacheEvict(value = "bookList", key = "'status' + #request.bookStatus + #request.userId")
