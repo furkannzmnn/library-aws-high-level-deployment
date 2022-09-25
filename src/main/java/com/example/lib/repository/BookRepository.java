@@ -7,7 +7,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<Book, Long> , JpaSpecificationExecutor<Book> {
-    List<Book> findByBookStatus(BookStatus bookStatus);
-    List<Book> findByTitle(String title);
-}
+public interface BookRepository extends JpaRepository<Book, Long> , JpaSpecificationExecutor<Book> { }

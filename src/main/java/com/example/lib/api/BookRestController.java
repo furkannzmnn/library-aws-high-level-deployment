@@ -59,4 +59,9 @@ public class BookRestController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/get/{bookId}")
+    public ResponseEntity<BookResponse> searchBook(@PathVariable Long bookId) {
+        return ResponseEntity.ok(bookListService.findBook(bookId));
+    }
+
 }

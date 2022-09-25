@@ -2,6 +2,8 @@ package com.example.lib.service;
 
 import com.example.lib.dto.BookResponse;
 import com.example.lib.dto.CategoryType;
+import com.example.lib.dto.ErrorCode;
+import com.example.lib.exception.GenericException;
 import com.example.lib.model.Book;
 import com.example.lib.model.BookStatus;
 import com.example.lib.model.Category;
@@ -69,6 +71,20 @@ public class BookListService {
                                 .imageUrl(each.getImage() != null ? each.getImage().getImageUrl() : null)
                                 .build())
                 .collect(Collectors.toList());
+    }
+
+    public BookResponse findBook(Long bookId) {
+        final Book fromDb = bookRepository.findById(bookId).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.BOOK_NOT_FOUND).build());
+        return BookResponse.builder()
+                .id(fromDb.getId())
+                .bookStatus(fromDb.getBookStatus())
+                .publisher(fromDb.getPublisher())
+                .authorName(fromDb.getAuthorName())
+                .totalPage(fromDb.getTotalPage())
+                .lastPageNumber(fromDb.getLastPageNumber())
+                .title(fromDb.getTitle())
+                .imageUrl(fromDb.getImage() != null ? fromDb.getImage().getImageUrl() : null)
+                .build();
     }
 
     private static class BookSearchSpecification {
