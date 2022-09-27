@@ -28,7 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(GenericException.class)
     public ResponseEntity<?> handleException(GenericException ex) {
         Map<String, Object> errors = new HashMap<>();
-        errors.put("error", ex.getMessage());
+        errors.put("error", ex.getErrorMessage());
         errors.put("errorCode", ex.getErrorCode());
         return ResponseEntity
                 .status(ex.getHttpStatus() != null ?  ex.getHttpStatus() : HttpStatus.BAD_REQUEST)
