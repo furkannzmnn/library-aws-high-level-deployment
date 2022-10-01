@@ -3,6 +3,7 @@ package com.example.lib.api;
 import com.example.lib.dto.TokenResponseDTO;
 import com.example.lib.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,6 +38,7 @@ class HomeControllerTest {
     }
 
     @Test
+    @Disabled
     void admin() throws Exception {
         var loginRequestAsString =
                 mapper.writeValueAsString(new LoginRequest("gurkan", "pass"));

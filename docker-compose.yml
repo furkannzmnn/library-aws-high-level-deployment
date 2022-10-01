@@ -10,27 +10,33 @@ services:
     networks:
       - app
   db:
-    image: mysql:latest
+    image: mysql/mysql-server:5.7
     restart: always
+    container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: lib
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
     ports:
-      - '9000:9000'
+      - '3306:3306'
     volumes:
-      - ~/apps/mysql:/var/lib/mysql
+      - ./mysql/data:/backup
     networks:
       - app
   lib:
     image: lib
     container_name: app_online
     ports:
-      - '8080:8080'
+      - '8082:8082'
     environment:
-      - spring.datasource.url=jdbc:mysql://localhost:9000/lib?useSSL=false
+      - SERVER_PORT=8082
+      - spring.datasource.url=jdbc:mysql://mysql:3306/lib
       - spring.redis.host=redis
       - spring.redis.port=6379
       - spring.datasource.username=root
       - spring.datasource.password=root
+    depends_on:
+      - db
     networks:
       - app
 networks:
