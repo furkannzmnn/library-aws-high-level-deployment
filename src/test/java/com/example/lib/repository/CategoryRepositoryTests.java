@@ -34,7 +34,7 @@ public class CategoryRepositoryTests {
         // when -  action or the behaviour that we are going test
         Category savedCategory = categoryRepository.save(category);
 
-        // then
+        // then - verify the output
         assertThat(savedCategory.getId()).isGreaterThan(0);
         assertThat(savedCategory).isNotNull();
     }
@@ -45,12 +45,10 @@ public class CategoryRepositoryTests {
         // given - precondition or setup
         Category category = Category.builder().name(CategoryType.COMIC.getValue()).build();
 
-        categoryRepository.save(category);
-
-        String name = CategoryType.COMIC.getValue();
+        Category savedCategory = categoryRepository.save(category);
 
         // when -  action or the behaviour that we are going test
-        Category returnedCategory = categoryRepository.findByName(name).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.CATEGORY_NOT_FOUND).build());
+        Category returnedCategory = categoryRepository.findById(savedCategory.getId()).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.CATEGORY_NOT_FOUND).build());
 
         // then - verify the output
         assertThat(returnedCategory).isNotNull();
