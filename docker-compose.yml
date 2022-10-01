@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis
+    volumes:
+      - ./data:/data
+    ports:
+      - '6379:6379'
+    networks:
+      - app
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '9000:9000'
+    volumes:
+      - ~/apps/mysql:/var/lib/mysql
+    networks:
+      - app
+  lib:
+    image: lib
+    container_name: app_online
+    ports:
+      - '8080:8080'
+    environment:
+      - spring.datasource.url=jdbc:mysql://localhost:9000/lib?useSSL=false
+      - spring.redis.host=redis
+      - spring.redis.port=6379
+      - spring.datasource.username=root
+      - spring.datasource.password=root
+    networks:
+      - app
+networks:
+  app:
+
+
+
+
