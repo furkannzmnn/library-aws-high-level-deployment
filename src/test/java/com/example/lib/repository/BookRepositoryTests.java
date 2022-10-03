@@ -5,21 +5,15 @@ import com.example.lib.dto.ErrorCode;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@RunWith(SpringRunner.class)
-public class BookRepositoryTests {
+
+public class BookRepositoryTests extends BaseRepositoryTests {
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -37,7 +31,7 @@ public class BookRepositoryTests {
         User user = User.builder()
                 .username("User Name")
                 .password("User Password")
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -72,7 +66,7 @@ public class BookRepositoryTests {
         User user = User.builder()
                 .username("User Name")
                 .password("User Password")
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -107,7 +101,7 @@ public class BookRepositoryTests {
         User user = User.builder()
                 .username("User Name")
                 .password("User Password")
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -155,7 +149,7 @@ public class BookRepositoryTests {
         User user = User.builder()
                 .username("User Name")
                 .password("User Password")
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -191,7 +185,7 @@ public class BookRepositoryTests {
         User user = User.builder()
                 .username("User Name")
                 .password("User Password")
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -241,7 +235,7 @@ public class BookRepositoryTests {
         User user = User.builder()
                 .username("User Name")
                 .password("User Password")
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         User savedUser = userRepository.save(user);
