@@ -6,13 +6,4 @@ pipelines:
         caches:
           - maven
         script:
-          - mvn -s mvn-config-bitbucket.xml verify
-
-
-definitions:
-  services:
-    mysql:
-      image: mysql:5.7
-      variables:
-        MYSQL_DATABASE: 'pipelines'
-        MYSQL_ROOT_PASSWORD: 'test_user_password'
+          - mvn clean install -DskipTests
