@@ -1,5 +1,4 @@
 image: maven:3.6.3-jdk-11
-
 pipelines:
   default:
     - step:
@@ -17,7 +16,5 @@ definitions:
     mysql:
       image: mysql:5.7
       variables:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: test
-        MYSQL_USER: test
-        MYSQL_PASSWORD: test
+        MYSQL_DATABASE: 'pipelines'
+        MYSQL_ROOT_PASSWORD: 'test_user_password'
