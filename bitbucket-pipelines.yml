@@ -1,6 +1,9 @@
+image: maven:3.6.3-jdk-11
+
 pipelines:
   default:
     - step:
         name: Testleri koşuyoruz
         script:
           - echo "testler tamam"
+          - mvn clean install
