@@ -5,7 +5,6 @@ pipelines:
         name: Testleri koşuyoruz
         script:
           - echo "testler tamam"
-          - mysql -h 127.0.0.1 -u root -ptest_user_password -e "SHOW DATABASES"
           - mvn clean install
         services:
           - mysql
