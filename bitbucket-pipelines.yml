@@ -2,8 +2,27 @@ pipelines:
   default:
     - step:
         name: Testleri koşuyoruz
-        image: maven:3.6.3-jdk-8
+        image: mvn:3.6.3-jdk-8
+        # myssql connect
+        services:
+          - mysql
+
         caches:
           - maven
+
         script:
-          - mvn clean install -DskipTests
+          - echo "testler tamam"
+          - mysql -u root -e "CREATE DATABASE IF NOT EXISTS lib;"
+          - mvn clean install
+
+definitions:
+  services:
+    mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    ports:
+      - 3306
