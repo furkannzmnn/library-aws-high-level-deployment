@@ -21,7 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 class LibApplicationTests {
 
     @Test
-    void contextLoads() {
+    void contextLoads() throws Exception {
+        throw new Exception();
     }
 
 }
