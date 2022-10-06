@@ -22,7 +22,6 @@ class LibApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        throw new Exception();
     }
 
 }
