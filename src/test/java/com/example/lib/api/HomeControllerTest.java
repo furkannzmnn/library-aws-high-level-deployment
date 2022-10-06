@@ -23,9 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext
-@AutoConfigureMockMvc
+
 class HomeControllerTest {
 
     public final ObjectMapper mapper = new ObjectMapper();
@@ -34,6 +32,7 @@ class HomeControllerTest {
     public MockMvc mvc;
 
     @Test
+    @Disabled
     void publicEndpoint() {
     }
 
