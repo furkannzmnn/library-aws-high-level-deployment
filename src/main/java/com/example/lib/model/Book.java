@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "book")
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
