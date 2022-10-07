@@ -4,7 +4,7 @@ import com.example.lib.dto.CategoryType;
 import com.example.lib.dto.ErrorCode;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.Category;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
