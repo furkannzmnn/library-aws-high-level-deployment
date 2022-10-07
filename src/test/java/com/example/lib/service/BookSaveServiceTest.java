@@ -62,7 +62,7 @@ class BookSaveServiceTest {
         // when
         when(categoryService.loadCategory(anyLong())).thenReturn(category);
         when(bookRepository.save(any(Book.class))).thenReturn(book);
-        //when(userService.findInContextUser()).thenReturn(new UserDto());
+        when(userService.findInContextUser()).thenReturn(new UserDto());
 
         // then
         BookListItemResponse bookListItemResponse = bookSaveService.saveBook(saveBookRequest);
