@@ -1,6 +1,6 @@
-version: '3.7'
+version: '3.8'
 
-services:  #base image??
+services:
   redisdb:
     image: "redis"
     ports:
@@ -25,12 +25,12 @@ services:  #base image??
       - ./mysql/data:/backup
 
   app:
-    image: app
+    image: lib
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8082:8082"
+      - 8082:8082
     depends_on:
       - mysqldb
     environment:
@@ -38,6 +38,8 @@ services:  #base image??
       - SERVER_PORT=8082
       - spring.redis.host=redis
       - spring.redis.port=6379
+      - spring.datasource.username=root
+      - spring.datasource.password=root
     restart: always
     networks:
       - shared-net
@@ -45,3 +47,7 @@ services:  #base image??
 networks:
   shared-net:
     driver: bridge
+
+
+
+

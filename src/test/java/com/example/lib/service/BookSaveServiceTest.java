@@ -3,6 +3,7 @@ package com.example.lib.service;
 import com.example.lib.dto.BookListItemResponse;
 import com.example.lib.dto.CategoryType;
 import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.UserDto;
 import com.example.lib.model.Book;
 import com.example.lib.model.BookStatus;
 import com.example.lib.model.Category;
@@ -27,6 +28,8 @@ class BookSaveServiceTest {
     private BookRepository bookRepository;
     @Mock
     private CategoryService categoryService;
+    @Mock
+    private UserService userService;
 
 
     @Test
@@ -59,6 +62,7 @@ class BookSaveServiceTest {
         // when
         when(categoryService.loadCategory(anyLong())).thenReturn(category);
         when(bookRepository.save(any(Book.class))).thenReturn(book);
+        //when(userService.findInContextUser()).thenReturn(new UserDto());
 
         // then
         BookListItemResponse bookListItemResponse = bookSaveService.saveBook(saveBookRequest);
