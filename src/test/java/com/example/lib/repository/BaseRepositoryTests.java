@@ -10,4 +10,5 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles(value = "integration")
 @ExtendWith(SpringExtension.class)
 public abstract class BaseRepositoryTests {
+    private String name;
 }
