@@ -1,14 +1,13 @@
 
-image: maven:3.6.3
+image: maven:3.6.3-jdk-11
 
 pipelines:
   default:
-    - parallel:
       - step:
-        name: Testleri koşuyoruz
-        size: 2x
-        caches:
+         name: Testleri koşuyoruz
+         size: 2x
+         caches:
           - maven
-        script:
+         script:
           - mvn test
 
