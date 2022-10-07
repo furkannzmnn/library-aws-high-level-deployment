@@ -1,3 +1,4 @@
+
 image: maven:3.6.3
 
 pipelines:
@@ -10,3 +11,4 @@ pipelines:
           - maven
         script:
           - mvn test
+

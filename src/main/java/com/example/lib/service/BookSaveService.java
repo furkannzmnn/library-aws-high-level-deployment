@@ -10,7 +10,6 @@ import com.example.lib.model.Image;
 import com.example.lib.repository.BookRepository;
 import com.example.lib.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.scheduling.annotation.Async;
@@ -24,6 +23,7 @@ public class BookSaveService {
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
     private final ImageRepository imageRepository;
+    private final UserService userService;
 
     @Transactional
     @Caching(evict = {
@@ -32,6 +32,7 @@ public class BookSaveService {
     })
     public BookListItemResponse saveBook(SaveBookRequest request) {
         Category category = categoryService.loadCategory(request.getCategoryId());
+        final Long userID = userService.findInContextUser().getId();
         final Book book = Book.builder()
                 .category(category)
                 .bookStatus(request.getBookStatus())
@@ -40,7 +41,7 @@ public class BookSaveService {
                 .lastPageNumber(request.getLastPageNumber())
                 .authorName(request.getAuthorName())
                 .totalPage(request.getTotalPage())
-                .userId(request.getUserId())
+                .userId(userID)
                 .build();
 
         final Book fromDb = bookRepository.save(book);

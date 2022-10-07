@@ -7,6 +7,9 @@ import com.example.lib.model.User;
 import com.example.lib.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,6 +40,12 @@ public class UserService {
                 .username(user.getUsername())
                 .role(user.getRole())
                 .build();
+    }
+
+    public UserDto findInContextUser() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final UserDetails details = (UserDetails) authentication.getPrincipal();
+        return getUserDto(details.getUsername());
     }
 
 }

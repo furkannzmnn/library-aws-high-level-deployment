@@ -16,4 +16,7 @@ import javax.persistence.Table;
 public class Image extends BaseEntity{
     private String imageUrl;
 
+    public String generateSqlTable() {
+        return "CREATE TABLE images (id BIGINT NOT NULL, image_url VARCHAR(255), PRIMARY KEY (id))";
+    }
 }

@@ -7,6 +7,7 @@ import com.example.lib.dto.SaveBookRequest;
 import com.example.lib.model.BookStatus;
 import com.example.lib.service.BookListService;
 import com.example.lib.service.BookSaveService;
+import com.example.lib.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class BookRestController {
 
     private final BookListService bookListService;
     private final BookSaveService bookSaveService;
+    private final UserService userService;
 
 
     @PostMapping(name = "/save")
@@ -32,20 +34,23 @@ public class BookRestController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BookResponse>> listBook(@RequestParam(name = "size") int size, @RequestParam(name = "page") int page, @RequestParam(name = "userId") Long userId) {
-        return ResponseEntity.ok(bookListService.listBooks(size, page, userId));
+    public ResponseEntity<List<BookResponse>> listBook(@RequestParam(name = "size") int size, @RequestParam(name = "page") int page) {
+        final Long userID = userService.findInContextUser().getId();
+        return ResponseEntity.ok(bookListService.listBooks(size, page, userID));
     }
 
 
     @GetMapping("/search/{categoryType}")
-    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable CategoryType categoryType, @RequestParam(name = "userId") Long userId) {
-        return ResponseEntity.ok(this.bookListService.searchByCategory(categoryType, userId));
+    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable CategoryType categoryType) {
+        final Long userID = userService.findInContextUser().getId();
+        return ResponseEntity.ok(this.bookListService.searchByCategory(categoryType, userID));
     }
 
 
     @GetMapping("/{status}")
-    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable BookStatus status, @RequestParam(name = "userId") Long userId) {
-        return ResponseEntity.ok(this.bookListService.searchBookStatus(status, userId));
+    public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable BookStatus status) {
+        final Long userID = userService.findInContextUser().getId();
+        return ResponseEntity.ok(this.bookListService.searchBookStatus(status, userID));
     }
 
     @GetMapping("/list/{title}")
