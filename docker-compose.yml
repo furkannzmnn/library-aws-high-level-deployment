@@ -1,47 +1,47 @@
-version: "3.7"
+version: '3.7'
 
-services:
-  redis:
-    image: redis
-    volumes:
-      - ./data:/data
+services:  #base image??
+  redisdb:
+    image: "redis"
     ports:
-      - '6379:6379'
-    networks:
-      - app
-  db:
-    image: mysql/mysql-server:5.7
-    restart: always
-    container_name: mysql
+      - "6379:6379"
     environment:
-        MYSQL_DATABASE: lib
-        MYSQL_USER: root
-        MYSQL_PASSWORD: root
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - shared-net
+
+  mysqldb:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lib
+      MYSQL_PASSWORD: root
     ports:
-      - '3306:3306'
+      - "3306:3306"
+    networks:
+      - shared-net
     volumes:
       - ./mysql/data:/backup
-    networks:
-      - app
-  lib:
-    image: lib
-    container_name: app_online
+
+  app:
+    image: app
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
-      - '8082:8082'
+      - "8082:8082"
+    depends_on:
+      - mysqldb
     environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/lib?useSSL=false&allowPublicKeyRetrieval=true
       - SERVER_PORT=8082
-      - spring.datasource.url=jdbc:mysql://mysql:3306/lib
       - spring.redis.host=redis
       - spring.redis.port=6379
-      - spring.datasource.username=root
-      - spring.datasource.password=root
-    depends_on:
-      - db
+    restart: always
     networks:
-      - app
+      - shared-net
+
 networks:
-  app:
-
-
-
-
+  shared-net:
+    driver: bridge

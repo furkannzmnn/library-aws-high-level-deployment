@@ -1,6 +1,12 @@
+image: maven:3.6.3
+
 pipelines:
   default:
-    - step:
+    - parallel:
+      - step:
         name: Testleri koşuyoruz
+        size: 2x
+        caches:
+          - maven
         script:
-          - echo "testler tamam"
+          - mvn test
