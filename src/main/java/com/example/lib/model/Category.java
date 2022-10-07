@@ -20,8 +20,4 @@ public class Category extends BaseEntity{
     @OneToMany(mappedBy = "category")
     @JsonIgnore
     private List<Book> books;
-
-    public String generateSqlTable() {
-        return "CREATE TABLE category (id BIGINT NOT NULL, name VARCHAR(255), PRIMARY KEY (id))";
-    }
 }

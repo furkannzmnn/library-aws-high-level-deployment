@@ -7,6 +7,7 @@ import com.example.lib.model.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,6 +88,8 @@ public class CategoryRepositoryTests extends BaseRepositoryTests {
 
         // given - precondition or setup
         Category categoryComic = Category.builder().name(CategoryType.COMIC.getValue()).build();
+        categoryComic.setCreateDate(LocalDateTime.now());
+        categoryComic.setUpdateDate(LocalDateTime.now());
         categoryRepository.save(categoryComic);
 
         String name = CategoryType.COMIC.getValue();
