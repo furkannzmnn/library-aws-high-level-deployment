@@ -12,7 +12,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 public class Category extends BaseEntity{
 
     private String name;
