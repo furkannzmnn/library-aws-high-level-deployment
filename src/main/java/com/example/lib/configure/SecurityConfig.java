@@ -63,9 +63,10 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/public", "/h2-console/**", "/api/auth/login");
+        return (web) -> web.ignoring().antMatchers("/api/public", "/h2-console/**", "/api/auth/login","/api/auth/signup");
     }
     @Bean
     public WebMvcConfigurer corsConfigurer() {

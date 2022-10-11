@@ -48,4 +48,8 @@ public class UserService {
         return getUserDto(details.getUsername());
     }
 
+    public Boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
 }
