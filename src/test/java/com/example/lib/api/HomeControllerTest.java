@@ -80,33 +80,17 @@ class HomeControllerTest {
 
 
     @Test
+    @Disabled
     void admin() throws Exception {
-
-        var adminForSignUp = SignUpRequest.builder()
-                .username("Admin 1")
-                .password("Admin password 1")
-                .role("ADMIN")
-                .build();
-
-        mvc.perform(post("/api/auth/signup")
-                        .content(asJsonString(adminForSignUp))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-
-        var loginRequestForUser = LoginRequest.builder()
-                .username("Admin 1")
-                .password("Admin password 1")
-                .build();
+        var loginRequestAsString =
+                mapper.writeValueAsString(new LoginRequest("gurkan", "pass"));
 
         MvcResult result = mvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(loginRequestForUser)))
+                        .content(loginRequestAsString))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andReturn();
-
         String content = result.getResponse().getContentAsString();
         var loggedUser = mapper.readValue(content, TokenResponseDTO.class);
         mvc.perform(get("/api/admin")
