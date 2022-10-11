@@ -23,8 +23,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    PasswordEncoder encoder;
-
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -54,36 +52,8 @@ public class UserService {
         return getUserDto(details.getUsername());
     }
 
-    public UserDto signup(SignUpRequest signUpRequest){
-        var user = findUserByUsername(signUpRequest.getUsername());
-
-        if(user == null){
-
-            user = User.builder()
-                    .username(signUpRequest.getUsername())
-                    .password(encoder.encode(signUpRequest.getPassword()))
-                    .role(Role.USER)
-                    .build();
-
-            User fromDb = null;
-
-            try {
-                fromDb = create(user);
-            } catch (DataAccessException ex) {
-                throw GenericException.builder().httpStatus(HttpStatus.BAD_REQUEST)
-                        .errorMessage("user cannot created!").build();
-            }
-
-            return UserDto.builder()
-                    .id(fromDb.getId())
-                    .username(fromDb.getUsername())
-                    .role(fromDb.getRole())
-                    .build();
-
-        }
-
-        throw GenericException.builder().httpStatus(HttpStatus.FOUND)
-                .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
+    public Boolean existsByUsername(String username){
+        return userRepository.existsByUsername(username);
     }
 
 }

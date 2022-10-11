@@ -4,9 +4,12 @@ import com.example.lib.dto.ErrorCode;
 import com.example.lib.dto.TokenResponseDTO;
 import com.example.lib.dto.UserDto;
 import com.example.lib.exception.GenericException;
+import com.example.lib.model.Role;
+import com.example.lib.model.User;
 import com.example.lib.request.LoginRequest;
 import com.example.lib.request.SignUpRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,6 +26,8 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final TokenService tokenService;
+
+    private final PasswordEncoder encoder;
 
     public TokenResponseDTO login(LoginRequest loginRequest) {
         try {
@@ -45,6 +50,34 @@ public class AuthService {
 
 
     public UserDto signup(SignUpRequest signUpRequest){
-        return userService.signup(signUpRequest);
+        var isUser = userService.existsByUsername(signUpRequest.getUsername());
+
+        if(!isUser){
+
+            var user = User.builder()
+                    .username(signUpRequest.getUsername())
+                    .password(encoder.encode(signUpRequest.getPassword()))
+                    .role(Role.USER)
+                    .build();
+
+            User fromDb = null;
+
+            try {
+                fromDb = userService.create(user);
+            } catch (DataAccessException ex) {
+                throw GenericException.builder().httpStatus(HttpStatus.BAD_REQUEST)
+                        .errorMessage("user cannot created!").build();
+            }
+
+            return UserDto.builder()
+                    .id(fromDb.getId())
+                    .username(fromDb.getUsername())
+                    .role(fromDb.getRole())
+                    .build();
+
+        }
+
+        throw GenericException.builder().httpStatus(HttpStatus.FOUND)
+                .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
     }
 }
