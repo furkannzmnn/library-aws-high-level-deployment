@@ -52,32 +52,30 @@ public class AuthService {
     public UserDto signup(SignUpRequest signUpRequest){
         var isUser = userService.existsByUsername(signUpRequest.getUsername());
 
-        if(!isUser){
+        if(isUser) throw GenericException.builder().httpStatus(HttpStatus.FOUND)
+                .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
 
-            var user = User.builder()
-                    .username(signUpRequest.getUsername())
-                    .password(encoder.encode(signUpRequest.getPassword()))
-                    .role(Role.USER)
-                    .build();
+        var user = User.builder()
+                .username(signUpRequest.getUsername())
+                .password(encoder.encode(signUpRequest.getPassword()))
+                .role(Role.USER)
+                .build();
 
-            User fromDb = null;
+        User fromDb = null;
 
-            try {
-                fromDb = userService.create(user);
-            } catch (DataAccessException ex) {
-                throw GenericException.builder().httpStatus(HttpStatus.BAD_REQUEST)
-                        .errorMessage("user cannot created!").build();
-            }
-
-            return UserDto.builder()
-                    .id(fromDb.getId())
-                    .username(fromDb.getUsername())
-                    .role(fromDb.getRole())
-                    .build();
-
+        try {
+            fromDb = userService.create(user);
+        } catch (DataAccessException ex) {
+            throw GenericException.builder().httpStatus(HttpStatus.BAD_REQUEST)
+                    .errorMessage("User cannot created!").build();
         }
 
-        throw GenericException.builder().httpStatus(HttpStatus.FOUND)
-                .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
+        return UserDto.builder()
+                .id(fromDb.getId())
+                .username(fromDb.getUsername())
+                .role(fromDb.getRole())
+                .build();
+
+
     }
 }
