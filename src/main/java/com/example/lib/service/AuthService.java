@@ -61,21 +61,13 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
 
-        User fromDb = null;
-
-        try {
-            fromDb = userService.create(user);
-        } catch (DataAccessException ex) {
-            throw GenericException.builder().httpStatus(HttpStatus.BAD_REQUEST)
-                    .errorMessage("User cannot created!").build();
-        }
+        User fromDb = userService.create(user);
 
         return UserDto.builder()
                 .id(fromDb.getId())
                 .username(fromDb.getUsername())
                 .role(fromDb.getRole())
                 .build();
-
 
     }
 }

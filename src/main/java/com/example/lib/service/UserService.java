@@ -17,6 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.sql.SQLException;
+
 @Service
 @Slf4j
 public class UserService {
@@ -28,7 +31,8 @@ public class UserService {
     }
 
 
-    public User create(User user) {
+    @Transactional(rollbackOn = Exception.class)
+    public User create(User user){
         return userRepository.save(user);
     }
 
