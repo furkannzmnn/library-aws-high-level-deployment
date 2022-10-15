@@ -9,18 +9,15 @@ import com.example.lib.model.BookStatus;
 import com.example.lib.model.Category;
 import com.example.lib.repository.BookRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-class BookSaveServiceTest {
+class BookSaveServiceTest extends BaseServiceTest{
 
     @InjectMocks
     private BookSaveService bookSaveService;

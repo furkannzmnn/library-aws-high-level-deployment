@@ -3,14 +3,22 @@ package com.example.lib.service;
 
 import com.example.lib.dto.UserDto;
 import com.example.lib.exception.GenericException;
+import com.example.lib.model.Role;
 import com.example.lib.model.User;
 import com.example.lib.repository.UserRepository;
+import com.example.lib.request.SignUpRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.sql.SQLException;
 
 @Service
 @Slf4j
@@ -18,13 +26,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
 
-    public User create(User user) {
+    @Transactional(rollbackOn = Exception.class)
+    public User create(User user){
         return userRepository.save(user);
     }
 
@@ -46,6 +54,10 @@ public class UserService {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final UserDetails details = (UserDetails) authentication.getPrincipal();
         return getUserDto(details.getUsername());
+    }
+
+    public Boolean existsByUsername(String username){
+        return userRepository.existsByUsername(username);
     }
 
 }
