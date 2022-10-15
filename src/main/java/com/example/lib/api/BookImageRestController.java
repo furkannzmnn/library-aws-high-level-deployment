@@ -34,9 +34,9 @@ public class BookImageRestController {
         File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
+            return file;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to convert multipartFile to File");
         }
-        return file;
     }
 }

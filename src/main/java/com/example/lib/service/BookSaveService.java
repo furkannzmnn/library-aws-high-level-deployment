@@ -63,7 +63,6 @@ public class BookSaveService {
     }
 
     @Transactional
-    @Async
     public void saveImage(Long bookId, String imageUrl) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.BOOK_NOT_FOUND).build());
         final Image image = book.getImage();
