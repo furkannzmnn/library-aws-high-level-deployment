@@ -8,6 +8,7 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.example.lib.model.Book;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +29,9 @@ import java.util.Map;
 public class AwsConfigure {
     public static final String REGION = "eu-west-3";
     private final Map<String, String> secretCache = new LinkedHashMap<>();
+
+    @Value("${cloud.aws.end-point.uri}")
+    private String url;
 
     @SuppressWarnings("unchecked")
     @PostConstruct
@@ -60,10 +65,13 @@ public class AwsConfigure {
         return AmazonS3ClientBuilder.standard()
                 .withRegion(REGION)
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(secretCache.get("accessKey"), secretCache.get("secretKey"))))
+                .withEndpointConfiguration(getEndpointConfiguration(url))
                 .build();
     }
 
-
+    private EndpointConfiguration getEndpointConfiguration(String url) {
+        return new EndpointConfiguration(url, REGION);
+    }
 
 
 }
