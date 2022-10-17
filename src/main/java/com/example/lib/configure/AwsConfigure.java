@@ -40,7 +40,7 @@ public class AwsConfigure {
         String region = "eu-west-3";
 
         AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
-                .withRegion(region)
+                .withEndpointConfiguration(getEndpointConfiguration(url))
                 .build();
 
         String secret;
@@ -63,7 +63,6 @@ public class AwsConfigure {
     @Bean
     public AmazonS3 s3Client() {
         return AmazonS3ClientBuilder.standard()
-                .withRegion(REGION)
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(secretCache.get("accessKey"), secretCache.get("secretKey"))))
                 .withEndpointConfiguration(getEndpointConfiguration(url))
                 .build();

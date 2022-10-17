@@ -1,0 +1,1 @@
+aws --endpoint-url=http://localhost:4566 secretsmanager create-secret --name aws/secret --secret-string '{"my_uname":"username","my_pwd":"password"}'
