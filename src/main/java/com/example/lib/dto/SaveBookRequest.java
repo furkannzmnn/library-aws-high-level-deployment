@@ -27,7 +27,6 @@ public final class SaveBookRequest {
     private String publisher;
     @NotNull
     private Integer lastPageNumber;
-    private File image;
     @NotNull
     private Long categoryId;
     @NotNull

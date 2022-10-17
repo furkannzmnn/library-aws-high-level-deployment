@@ -3,6 +3,7 @@ package com.example.lib.service;
 import com.example.lib.dto.BookListItemResponse;
 import com.example.lib.dto.ErrorCode;
 import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.converter.BookDtoConverter;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.Book;
 import com.example.lib.model.Category;
@@ -33,29 +34,10 @@ public class BookSaveService {
     public BookListItemResponse saveBook(SaveBookRequest request) {
         Category category = categoryService.loadCategory(request.getCategoryId());
         final Long userID = userService.findInContextUser().getId();
-        final Book book = Book.builder()
-                .category(category)
-                .bookStatus(request.getBookStatus())
-                .title(request.getTitle())
-                .publisher(request.getPublisher())
-                .lastPageNumber(request.getLastPageNumber())
-                .authorName(request.getAuthorName())
-                .totalPage(request.getTotalPage())
-                .userId(userID)
-                .build();
+        final Book book = BookDtoConverter.convertToBookDto(request, category, userID);
 
         final Book fromDb = bookRepository.save(book);
-        return BookListItemResponse.builder()
-                .categoryName(book.getCategory().getName())
-                .id(fromDb.getId())
-                .bookStatus(fromDb.getBookStatus())
-                .publisher(fromDb.getPublisher())
-                .authorName(fromDb.getAuthorName())
-                .totalPage(fromDb.getTotalPage())
-                .lastPageNumber(fromDb.getLastPageNumber())
-                .title(fromDb.getTitle())
-                .userId(fromDb.getUserId())
-                .build();
+        return BookDtoConverter.toItem(fromDb);
     }
 
     public void deleteBook(Long bookId) {
