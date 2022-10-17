@@ -53,6 +53,9 @@ public class UserService {
     public UserDto findInContextUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final UserDetails details = (UserDetails) authentication.getPrincipal();
+        if (details == null) {
+            throw GenericException.builder().httpStatus(HttpStatus.UNAUTHORIZED).errorMessage("user not found!").build();
+        }
         return getUserDto(details.getUsername());
     }
 
