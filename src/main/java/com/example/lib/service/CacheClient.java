@@ -2,10 +2,13 @@ package com.example.lib.service;
 
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.List;
+
 public interface CacheClient {
     void set(String key, Object value);
     Object get(String key);
     void delete(String key);
+    void deleteAll(List<String> keys);
 
     void shutdown();
 

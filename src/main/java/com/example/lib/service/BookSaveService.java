@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -37,9 +38,15 @@ public class BookSaveService {
         final Book book = BookDtoConverter.convertToBookDto(request, category, userID);
 
         final Book fromDb = bookRepository.save(book);
-        // @CacheEvict(value = "bookList", key = "'status' + #request.bookStatus + #request.userId")
-        cacheClient.delete("status" + request.getBookStatus() + request.getUserId());
+        evictCache(request);
+
         return BookDtoConverter.toItem(fromDb);
+    }
+
+    private void evictCache(SaveBookRequest request) {
+        final String statusCache = "status" + request.getBookStatus() + request.getUserId();
+        final String saveBookCache = "saveBook_" + request.getUserId();
+        cacheClient.deleteAll(List.of(statusCache, saveBookCache));
     }
 
     public void deleteBook(Long bookId) {
