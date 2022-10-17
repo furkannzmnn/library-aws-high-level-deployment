@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 @Slf4j
@@ -39,7 +40,7 @@ public class UserService {
 
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> GenericException.builder().httpStatus(HttpStatus.NOT_FOUND).errorMessage("user not found!").build());
+                .orElseThrow(notFoundUser(HttpStatus.NOT_FOUND));
     }
 
     public UserDto getUserDto(String username) {
@@ -52,9 +53,13 @@ public class UserService {
     }
 
     public UserDto findInContextUser() {
-        final Authentication authentication = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).orElseThrow(() -> GenericException.builder().httpStatus(HttpStatus.UNAUTHORIZED).errorMessage("user not found!").build());
-        final UserDetails details = Optional.ofNullable((UserDetails) authentication.getPrincipal()).orElseThrow(() -> GenericException.builder().httpStatus(HttpStatus.UNAUTHORIZED).errorMessage("user not found!").build());
+        final Authentication authentication = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).orElseThrow(notFoundUser(HttpStatus.UNAUTHORIZED));
+        final UserDetails details = Optional.ofNullable((UserDetails) authentication.getPrincipal()).orElseThrow(notFoundUser(HttpStatus.UNAUTHORIZED));
         return getUserDto(details.getUsername());
+    }
+
+    private static Supplier<GenericException> notFoundUser(HttpStatus unauthorized) {
+        return () -> GenericException.builder().httpStatus(unauthorized).errorMessage("user not found!").build();
     }
 
     public Boolean existsByUsername(String username){
