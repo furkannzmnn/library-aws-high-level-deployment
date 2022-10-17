@@ -27,6 +27,8 @@ class BookSaveServiceTest extends BaseServiceTest{
     private CategoryService categoryService;
     @Mock
     private UserService userService;
+    @Mock
+    private CacheClient cacheClient;
 
 
     @Test

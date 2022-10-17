@@ -25,11 +25,11 @@ public class BookSaveService {
     private final CategoryService categoryService;
     private final ImageRepository imageRepository;
     private final UserService userService;
+    private final CacheClient cacheClient;
 
     @Transactional
     @Caching(evict = {
             @CacheEvict(key = "'saveBook_' + #request.userId", value = "bookList"),
-            @CacheEvict(value = "bookList", key = "'status' + #request.bookStatus + #request.userId")
     })
     public BookListItemResponse saveBook(SaveBookRequest request) {
         Category category = categoryService.loadCategory(request.getCategoryId());
@@ -37,6 +37,8 @@ public class BookSaveService {
         final Book book = BookDtoConverter.convertToBookDto(request, category, userID);
 
         final Book fromDb = bookRepository.save(book);
+        // @CacheEvict(value = "bookList", key = "'status' + #request.bookStatus + #request.userId")
+        cacheClient.delete("status" + request.getBookStatus() + request.getUserId());
         return BookDtoConverter.toItem(fromDb);
     }
 
