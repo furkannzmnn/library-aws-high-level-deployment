@@ -66,7 +66,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/public", "/h2-console/**", "/api/auth/login","/api/auth/signup");
+        return (web) -> web.ignoring().antMatchers("/api/public", "/h2-console/**", "/api/auth/login","/api/auth/signup","/**");
     }
     @Bean
     public WebMvcConfigurer corsConfigurer() {

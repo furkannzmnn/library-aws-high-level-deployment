@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -51,8 +52,8 @@ public class UserService {
     }
 
     public UserDto findInContextUser() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final UserDetails details = (UserDetails) authentication.getPrincipal();
+        final Authentication authentication = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).orElseThrow(() -> GenericException.builder().httpStatus(HttpStatus.UNAUTHORIZED).errorMessage("user not found!").build());
+        final UserDetails details = Optional.ofNullable((UserDetails) authentication.getPrincipal()).orElseThrow(() -> GenericException.builder().httpStatus(HttpStatus.UNAUTHORIZED).errorMessage("user not found!").build());
         return getUserDto(details.getUsername());
     }
 

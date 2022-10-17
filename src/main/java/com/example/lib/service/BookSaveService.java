@@ -3,6 +3,7 @@ package com.example.lib.service;
 import com.example.lib.dto.BookListItemResponse;
 import com.example.lib.dto.ErrorCode;
 import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.converter.BookDtoConverter;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.Book;
 import com.example.lib.model.Category;
@@ -16,6 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -24,38 +26,27 @@ public class BookSaveService {
     private final CategoryService categoryService;
     private final ImageRepository imageRepository;
     private final UserService userService;
+    private final CacheClient cacheClient;
 
     @Transactional
     @Caching(evict = {
             @CacheEvict(key = "'saveBook_' + #request.userId", value = "bookList"),
-            @CacheEvict(value = "bookList", key = "'status' + #request.bookStatus + #request.userId")
     })
     public BookListItemResponse saveBook(SaveBookRequest request) {
         Category category = categoryService.loadCategory(request.getCategoryId());
         final Long userID = userService.findInContextUser().getId();
-        final Book book = Book.builder()
-                .category(category)
-                .bookStatus(request.getBookStatus())
-                .title(request.getTitle())
-                .publisher(request.getPublisher())
-                .lastPageNumber(request.getLastPageNumber())
-                .authorName(request.getAuthorName())
-                .totalPage(request.getTotalPage())
-                .userId(userID)
-                .build();
+        final Book book = BookDtoConverter.convertToBookDto(request, category, userID);
 
         final Book fromDb = bookRepository.save(book);
-        return BookListItemResponse.builder()
-                .categoryName(book.getCategory().getName())
-                .id(fromDb.getId())
-                .bookStatus(fromDb.getBookStatus())
-                .publisher(fromDb.getPublisher())
-                .authorName(fromDb.getAuthorName())
-                .totalPage(fromDb.getTotalPage())
-                .lastPageNumber(fromDb.getLastPageNumber())
-                .title(fromDb.getTitle())
-                .userId(fromDb.getUserId())
-                .build();
+        evictCache(request);
+
+        return BookDtoConverter.toItem(fromDb);
+    }
+
+    private void evictCache(SaveBookRequest request) {
+        final String statusCache = "status" + request.getBookStatus() + request.getUserId();
+        final String saveBookCache = "saveBook_" + request.getUserId();
+        cacheClient.deleteAll(List.of(statusCache, saveBookCache));
     }
 
     public void deleteBook(Long bookId) {

@@ -15,7 +15,7 @@ public class CategoryService {
 
 
     public Category loadCategory(Long id) {
-        return categoryRepository.findById(id).orElseThrow();
+        return categoryRepository.findById(id).orElseThrow(() -> GenericException.builder().errorCode(ErrorCode.CATEGORY_NOT_FOUND).build());
     }
 
     public Category findByName(String value) {
