@@ -9,13 +9,9 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
-import com.example.lib.model.Book;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +27,10 @@ public class AwsConfigure {
     private final Map<String, String> secretCache = new LinkedHashMap<>();
 
     @Value("${cloud.aws.end-point.uri}")
-    private String url;
+    private String s3Url;
+
+    @Value("${cloud.aws.secrets-manager.end-point.uri}")
+    private String secretManagerUrl;
 
     @SuppressWarnings("unchecked")
     @PostConstruct
@@ -40,7 +39,7 @@ public class AwsConfigure {
         String region = "eu-west-3";
 
         AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
-                .withEndpointConfiguration(getEndpointConfiguration(url))
+                .withEndpointConfiguration(new EndpointConfiguration(secretManagerUrl, region))
                 .build();
 
         String secret;
@@ -64,7 +63,7 @@ public class AwsConfigure {
     public AmazonS3 s3Client() {
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(secretCache.get("accessKey"), secretCache.get("secretKey"))))
-                .withEndpointConfiguration(getEndpointConfiguration(url))
+                .withEndpointConfiguration(getEndpointConfiguration(s3Url))
                 .build();
     }
 
