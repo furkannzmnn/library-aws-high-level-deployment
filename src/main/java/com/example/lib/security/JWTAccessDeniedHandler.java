@@ -12,7 +12,8 @@ import java.io.IOException;
 @Component
 public class JWTAccessDeniedHandler implements AccessDeniedHandler {
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
+        // TODO FRONTEND SHOULD HANDLE THIS -> ERROR PAGE
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getOutputStream().println("{ \"error\": \"" + accessDeniedException.getMessage() + "\" }");
