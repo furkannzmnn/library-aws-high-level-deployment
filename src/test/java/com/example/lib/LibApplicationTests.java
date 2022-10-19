@@ -9,6 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.containers.localstack.LocalStackContainer;
 
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
@@ -21,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 class LibApplicationTests {
 
     @Test
-    void contextLoads() throws Exception {
+    void contextLoads() {
     }
 
 }

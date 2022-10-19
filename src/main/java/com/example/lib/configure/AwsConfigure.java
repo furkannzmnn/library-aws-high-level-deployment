@@ -45,7 +45,7 @@ public class AwsConfigure {
         String secret;
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
                 .withSecretId(secretName);
-        GetSecretValueResult getSecretValueResult = null;
+        GetSecretValueResult getSecretValueResult;
 
         getSecretValueResult = client.getSecretValue(getSecretValueRequest);
 
