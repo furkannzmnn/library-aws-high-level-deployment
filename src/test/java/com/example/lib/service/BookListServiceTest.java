@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class BookListServiceTest extends BaseServiceTest{
+public class BookListServiceTest{
 
     @InjectMocks
     private BookListService bookListService;
