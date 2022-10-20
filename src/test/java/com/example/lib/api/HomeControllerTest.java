@@ -19,10 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles(value = "integration")
-class HomeControllerTest {
+
+class HomeControllerTest extends BaseRestControllerTest {
 
     public final ObjectMapper mapper = new ObjectMapper();
 

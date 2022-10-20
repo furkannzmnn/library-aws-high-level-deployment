@@ -21,10 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles(value = "integration")
-class BookUpdateRestControllerTest {
+class BookUpdateRestControllerTest extends BaseRestControllerTest {
 
     public final ObjectMapper mapper = new ObjectMapper();
 

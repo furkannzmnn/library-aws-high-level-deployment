@@ -30,12 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles(value = "integration")
-class BookImageRestControllerTest {
+class BookImageRestControllerTest extends BaseRestControllerTest {
 
     public final ObjectMapper mapper = new ObjectMapper();
+
 
     @MockBean
     private BookSaveService bookSaveService;
