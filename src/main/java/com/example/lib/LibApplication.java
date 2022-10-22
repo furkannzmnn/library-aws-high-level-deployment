@@ -1,10 +1,6 @@
 package com.example.lib;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -29,7 +25,5 @@ public class LibApplication {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
-
-
 
 }

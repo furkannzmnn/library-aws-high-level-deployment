@@ -32,6 +32,7 @@ public class AwsConfigure {
     @Value("${cloud.aws.secrets-manager.end-point.uri}")
     private String secretManagerUrl;
 
+
     @SuppressWarnings("unchecked")
     @PostConstruct
     public void init() throws JsonProcessingException {
