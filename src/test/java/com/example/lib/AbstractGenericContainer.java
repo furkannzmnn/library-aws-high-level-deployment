@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.TestPropertySourceUtils;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
@@ -13,10 +14,11 @@ import java.io.IOException;
 
 @ContextConfiguration(initializers = AbstractGenericContainer.Initializer.class)
 public abstract class AbstractGenericContainer {
-    public static final String LOCALSTACK_HOSTNAME = "localhost";
-    public static final String LOCALSTACK_REGION = "eu-west-3";
-    public static final String LOCALSTACK_ACCESS_KEY = "test";
-    public static final String LOCALSTACK_SECRET_KEY = "test";
+    private static final String LOCALSTACK_REGION = "eu-west-3";
+    private static final String LOCALSTACK_ACCESS_KEY = "test";
+    private static final String LOCALSTACK_SECRET_KEY = "test";
+
+    private static final int REDIS_PORT = 6379;
 
     // aws config
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -25,6 +27,7 @@ public abstract class AbstractGenericContainer {
             String localStackHost;
             try {
                 localStackHost = initializeLocalStack();
+                initializeRedis();
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -45,6 +48,12 @@ public abstract class AbstractGenericContainer {
              return "cloud.aws.secrets-manager.end-point.uri=http://localhost:" + mappedPort;
         }
 
+        private static void initializeRedis() throws IOException, InterruptedException {
+            redisContainer.start();
+            final Integer mappedPort = redisContainer.getMappedPort(REDIS_PORT);
+            redisContainer.execInContainer("redis-cli", "-h", "localhost", "-p", String.valueOf(mappedPort), "ping");
+        }
+
         static LocalStackContainer localStackContainer = new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.12.17"))
                 .withServices(LocalStackContainer.Service.SECRETSMANAGER)
                 .withExposedPorts(4566, 4566)
@@ -54,6 +63,10 @@ public abstract class AbstractGenericContainer {
                 .withEnv("AWS_ACCESS_KEY_ID", LOCALSTACK_ACCESS_KEY)
                 .withEnv("AWS_SECRET_ACCESS_KEY", LOCALSTACK_SECRET_KEY)
                 .withEnv("PLATFORM", "linux/x86_64");
+
+        static GenericContainer<?> redisContainer = new GenericContainer<>(DockerImageName.parse("redis:6.2.5"))
+                .withExposedPorts(REDIS_PORT)
+                .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*\\s", 1));
 
 
     }
