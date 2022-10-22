@@ -36,6 +36,11 @@ public abstract class AbstractGenericContainer {
             localStackContainer.start();
             final Integer mappedPort = localStackContainer.getMappedPort(4566);
 
+            localStackContainer.execInContainer("aws", "--version");
+            localStackContainer.execInContainer("aws", "configure", "set", "aws_access_key_id", LOCALSTACK_ACCESS_KEY);
+            localStackContainer.execInContainer("aws", "configure", "set", "aws_secret_access_key", LOCALSTACK_SECRET_KEY);
+            localStackContainer.execInContainer("aws", "configure", "set", "region", LOCALSTACK_REGION);
+            localStackContainer.execInContainer("aws", "configure", "set", "output", "json");// create secretmanager secret
             localStackContainer.execInContainer("aws", "--endpoint-url=http://0.0.0.0:" + 4566, "secretsmanager", "create-secret", "--name", "aws/secret", "--secret-string", "{\"accessKey\":\"" + LOCALSTACK_ACCESS_KEY + "\",\"secretKey\":\"" + LOCALSTACK_SECRET_KEY + "\"}");
              return "cloud.aws.secrets-manager.end-point.uri=http://localhost:" + mappedPort;
         }
@@ -44,7 +49,7 @@ public abstract class AbstractGenericContainer {
                 .withServices(LocalStackContainer.Service.SECRETSMANAGER)
                 .withExposedPorts(4566, 4566)
                 .waitingFor(Wait.forLogMessage("Ready.*", 1))
-                .withEnv("HOSTNAME_EXTERNAL", LOCALSTACK_HOSTNAME)
+                .withEnv("HOSTNAME_EXTERNAL", "localstack")
                 .withEnv("DEFAULT_REGION", LOCALSTACK_REGION)
                 .withEnv("AWS_ACCESS_KEY_ID", LOCALSTACK_ACCESS_KEY)
                 .withEnv("AWS_SECRET_ACCESS_KEY", LOCALSTACK_SECRET_KEY)
