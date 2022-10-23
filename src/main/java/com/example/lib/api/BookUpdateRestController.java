@@ -1,7 +1,7 @@
 package com.example.lib.api;
 
 import com.example.lib.dto.BookListItemResponse;
-import com.example.lib.dto.BookUpdateRequest;
+import com.example.lib.dto.request.BookUpdateRequest;
 import com.example.lib.service.BookUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

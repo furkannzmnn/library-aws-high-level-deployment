@@ -1,8 +1,8 @@
 package com.example.lib.api;
 
 import com.example.lib.dto.TokenResponseDTO;
-import com.example.lib.request.LoginRequest;
-import com.example.lib.request.SignUpRequest;
+import com.example.lib.dto.request.LoginRequest;
+import com.example.lib.dto.request.SignUpRequest;
 import com.example.lib.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

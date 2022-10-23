@@ -1,7 +1,7 @@
 package com.example.lib.dto.converter;
 
 import com.example.lib.dto.BookListItemResponse;
-import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.request.SaveBookRequest;
 import com.example.lib.model.Book;
 import com.example.lib.model.Category;
 

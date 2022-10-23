@@ -1,6 +1,7 @@
 package com.example.lib.api;
 
 import com.example.lib.dto.*;
+import com.example.lib.dto.request.SaveBookRequest;
 import com.example.lib.model.BookStatus;
 import com.example.lib.service.BookListService;
 import com.example.lib.service.BookSaveService;
@@ -96,7 +97,7 @@ public class BookRestControllerTest extends BaseRestControllerTest {
                 .build();
 
         // when -  action or the behaviour that we are going test
-        when(userService.findInContextUser()).thenReturn(userDto);
+        when(userService.findUserInContext()).thenReturn(userDto);
         when(bookListService.searchByCategory(categoryType, userDto.getId())).thenReturn(response);
 
 
@@ -133,7 +134,7 @@ public class BookRestControllerTest extends BaseRestControllerTest {
                 .build();
 
         // when -  action or the behaviour that we are going test
-        when(userService.findInContextUser()).thenReturn(userDto);
+        when(userService.findUserInContext()).thenReturn(userDto);
         when(bookListService.searchBookStatus(status, userDto.getId())).thenReturn(response);
 
         // then - verify the output
@@ -203,7 +204,7 @@ public class BookRestControllerTest extends BaseRestControllerTest {
                 .build();
 
         // when -  action or the behaviour that we are going test
-        when(userService.findInContextUser()).thenReturn(userDto);
+        when(userService.findUserInContext()).thenReturn(userDto);
         when(bookListService.listBooks(anyInt(), anyInt(), eq(userDto.getId()))).thenReturn(response);
 
         // then - verify the output

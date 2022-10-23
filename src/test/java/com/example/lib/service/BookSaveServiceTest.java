@@ -2,7 +2,7 @@ package com.example.lib.service;
 
 import com.example.lib.dto.BookListItemResponse;
 import com.example.lib.dto.CategoryType;
-import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.request.SaveBookRequest;
 import com.example.lib.dto.UserDto;
 import com.example.lib.model.Book;
 import com.example.lib.model.BookStatus;
@@ -61,7 +61,7 @@ class BookSaveServiceTest extends BaseServiceTest {
         // when
         when(categoryService.loadCategory(anyLong())).thenReturn(category);
         when(bookRepository.save(any(Book.class))).thenReturn(book);
-        when(userService.findInContextUser()).thenReturn(new UserDto());
+        when(userService.findUserInContext()).thenReturn(new UserDto());
 
         // then
         BookListItemResponse bookListItemResponse = bookSaveService.saveBook(saveBookRequest);

@@ -45,7 +45,7 @@ public class BookListService {
         return BookResponse.builder()
                 .authorName(model.getAuthorName())
                 .title(model.getTitle())
-                .imageUrl(model.getImage() != null ? model.getImage().getImageUrl() : null)
+                .imageUrl(model.getImage().getImageUrl())
                 .build();
     }
 
@@ -57,7 +57,7 @@ public class BookListService {
                 .map(each ->
                     BookResponse.builder()
                             .id(each.getId())
-                            .imageUrl(each.getImage() != null ? each.getImage().getImageUrl() : null)
+                            .imageUrl(each.getImage().getImageUrl())
                             .build())
                 .collect(Collectors.toList());
     }
@@ -68,7 +68,7 @@ public class BookListService {
                 .map(each ->
                         BookResponse.builder()
                                 .id(each.getId())
-                                .imageUrl(each.getImage() != null ? each.getImage().getImageUrl() : null)
+                                .imageUrl(each.getImage().getImageUrl())
                                 .build())
                 .collect(Collectors.toList());
     }
@@ -83,7 +83,7 @@ public class BookListService {
                 .totalPage(fromDb.getTotalPage())
                 .lastPageNumber(fromDb.getLastPageNumber())
                 .title(fromDb.getTitle())
-                .imageUrl(fromDb.getImage() != null ? fromDb.getImage().getImageUrl() : null)
+                .imageUrl(fromDb.getImage().getImageUrl())
                 .build();
     }
 
@@ -93,13 +93,10 @@ public class BookListService {
         }
 
         public static Specification<Book> searchByBookStatus(BookStatus bookStatus, Long userId) {
-            return (root, query, criteriaBuilder) -> {
-                // and query
-                return criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get("bookStatus"), bookStatus),
-                        criteriaBuilder.equal(root.get("userId"), userId)
-                );
-            };
+            return (root, query, criteriaBuilder) -> criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("bookStatus"), bookStatus),
+                    criteriaBuilder.equal(root.get("userId"), userId)
+            );
         }
 
         public static Specification<Book> searchByUserBooks(Long userId) {

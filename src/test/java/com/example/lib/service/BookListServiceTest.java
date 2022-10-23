@@ -2,7 +2,7 @@ package com.example.lib.service;
 
 import com.example.lib.dto.BookResponse;
 import com.example.lib.dto.CategoryType;
-import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.request.SaveBookRequest;
 import com.example.lib.model.*;
 import com.example.lib.repository.BookRepository;
 import org.junit.jupiter.api.Test;

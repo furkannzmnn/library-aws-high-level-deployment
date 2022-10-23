@@ -3,7 +3,7 @@ package com.example.lib.api;
 import com.example.lib.dto.BookListItemResponse;
 import com.example.lib.dto.BookResponse;
 import com.example.lib.dto.CategoryType;
-import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.request.SaveBookRequest;
 import com.example.lib.model.BookStatus;
 import com.example.lib.service.BookListService;
 import com.example.lib.service.BookSaveService;
@@ -35,21 +35,21 @@ public class BookRestController {
 
     @GetMapping("/search")
     public ResponseEntity<List<BookResponse>> listBook(@RequestParam(name = "size") int size, @RequestParam(name = "page") int page) {
-        final Long userID = userService.findInContextUser().getId();
+        final Long userID = userService.findUserInContext().getId();
         return ResponseEntity.ok(bookListService.listBooks(size, page, userID));
     }
 
 
     @GetMapping("/search/{categoryType}")
     public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable CategoryType categoryType) {
-        final Long userID = userService.findInContextUser().getId();
+        final Long userID = userService.findUserInContext().getId();
         return ResponseEntity.ok(this.bookListService.searchByCategory(categoryType, userID));
     }
 
 
     @GetMapping("/{status}")
     public ResponseEntity<List<BookResponse>> listByCategory(@PathVariable BookStatus status) {
-        final Long userID = userService.findInContextUser().getId();
+        final Long userID = userService.findUserInContext().getId();
         return ResponseEntity.ok(this.bookListService.searchBookStatus(status, userID));
     }
 

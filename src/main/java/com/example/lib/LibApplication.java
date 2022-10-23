@@ -15,11 +15,6 @@ public class LibApplication {
         SpringApplication.run(LibApplication.class, args);
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
 
     @Bean
     public ObjectMapper objectMapper() {

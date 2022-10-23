@@ -25,4 +25,8 @@ public class Book extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
     private Long userId;
+
+    public Image getImage() {
+        return image == null ? new Image() : image;
+    }
 }

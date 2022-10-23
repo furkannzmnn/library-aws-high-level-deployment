@@ -44,8 +44,6 @@ services:
     restart: "no"
     networks:
       - shared-net
-    command:
-      - sh -c "aws-setup.sh"
 
   localstack:
     image: localstack/localstack:latest
@@ -59,6 +57,9 @@ services:
       - '4566-4597:4566-4597'
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+
+    networks:
+        - shared-net
 
 networks:
   shared-net:

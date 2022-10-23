@@ -2,7 +2,7 @@ package com.example.lib.service;
 
 import com.example.lib.dto.BookListItemResponse;
 import com.example.lib.dto.ErrorCode;
-import com.example.lib.dto.SaveBookRequest;
+import com.example.lib.dto.request.SaveBookRequest;
 import com.example.lib.dto.converter.BookDtoConverter;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.Book;
@@ -34,7 +34,7 @@ public class BookSaveService {
     })
     public BookListItemResponse saveBook(SaveBookRequest request) {
         Category category = categoryService.loadCategory(request.getCategoryId());
-        final Long userID = userService.findInContextUser().getId();
+        final Long userID = userService.findUserInContext().getId();
         final Book book = BookDtoConverter.convertToBookDto(request, category, userID);
 
         final Book fromDb = bookRepository.save(book);
@@ -43,7 +43,8 @@ public class BookSaveService {
         return BookDtoConverter.toItem(fromDb);
     }
 
-    private void evictCache(SaveBookRequest request) {
+    @Async
+    public void evictCache(SaveBookRequest request) {
         final String statusCache = "status" + request.getBookStatus() + request.getUserId();
         final String saveBookCache = "saveBook_" + request.getUserId();
         cacheClient.deleteAll(List.of(statusCache, saveBookCache));

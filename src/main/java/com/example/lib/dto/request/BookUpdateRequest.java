@@ -1,4 +1,4 @@
-package com.example.lib.dto;
+package com.example.lib.dto.request;
 
 import com.example.lib.model.BookStatus;
 import lombok.Data;

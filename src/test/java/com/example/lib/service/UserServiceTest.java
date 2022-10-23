@@ -5,7 +5,6 @@ import com.example.lib.exception.GenericException;
 import com.example.lib.model.Role;
 import com.example.lib.model.User;
 import com.example.lib.repository.UserRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,8 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -144,7 +141,7 @@ class UserServiceTest extends BaseServiceTest {
         SecurityContextHolder.setContext(securityContext);
 
         // then - verify the output
-        UserDto actual = userService.findInContextUser();
+        UserDto actual = userService.findUserInContext();
         assertEquals(expected, actual);
         assertEquals(expected.getUsername(), actual.getUsername());
 

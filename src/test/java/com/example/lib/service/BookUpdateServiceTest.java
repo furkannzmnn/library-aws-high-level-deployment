@@ -1,6 +1,7 @@
 package com.example.lib.service;
 
 import com.example.lib.dto.*;
+import com.example.lib.dto.request.BookUpdateRequest;
 import com.example.lib.model.Book;
 import com.example.lib.model.BookStatus;
 import com.example.lib.model.Category;

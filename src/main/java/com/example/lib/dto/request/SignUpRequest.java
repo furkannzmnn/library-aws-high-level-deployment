@@ -1,4 +1,4 @@
-package com.example.lib.request;
+package com.example.lib.dto.request;
 
 import lombok.*;
 

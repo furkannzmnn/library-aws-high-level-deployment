@@ -6,10 +6,9 @@ import com.example.lib.dto.UserDto;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.Role;
 import com.example.lib.model.User;
-import com.example.lib.request.LoginRequest;
-import com.example.lib.request.SignUpRequest;
+import com.example.lib.dto.request.LoginRequest;
+import com.example.lib.dto.request.SignUpRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -36,23 +38,19 @@ public class AuthService {
             return TokenResponseDTO
                     .builder()
                     .accessToken(tokenService.generateToken(auth))
-                    .user(userService.getUserDto(loginRequest.getUsername()))
+                    .user(userService.findUser(loginRequest.getUsername()))
                     .build();
         } catch (final BadCredentialsException badCredentialsException) {
             throw GenericException.builder().httpStatus(HttpStatus.NOT_FOUND).errorCode(ErrorCode.USER_NOT_FOUND).errorMessage("Invalid Username or Password").build();
         }
     }
 
-    public UserDto getAuthenticatedUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userService.getUserDto(username);
-    }
 
-
+    @Transactional
     public UserDto signup(SignUpRequest signUpRequest){
-        var isUser = userService.existsByUsername(signUpRequest.getUsername());
+        var isAllReadyRegistered = userService.existsByUsername(signUpRequest.getUsername());
 
-        if(isUser) throw GenericException.builder().httpStatus(HttpStatus.FOUND)
+        if(isAllReadyRegistered) throw GenericException.builder().httpStatus(HttpStatus.FOUND)
                 .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
 
         var user = User.builder()

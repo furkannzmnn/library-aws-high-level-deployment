@@ -37,8 +37,16 @@ public class CacheManager implements CacheClient {
 
     @Override
     public void deleteAll(List<String> keys) {
+        int retry = 0;
         try (Jedis jedis = pool.getResource()) {
-            jedis.del(keys.toArray(new String[0]));
+            while(retry < 3) {
+                try {
+                    jedis.del(keys.toArray(new String[0]));
+                    break;
+                } catch (Exception e) {
+                    retry++;
+                }
+            }
         }
     }
 

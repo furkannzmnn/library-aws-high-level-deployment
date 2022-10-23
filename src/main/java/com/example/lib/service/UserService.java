@@ -3,22 +3,16 @@ package com.example.lib.service;
 
 import com.example.lib.dto.UserDto;
 import com.example.lib.exception.GenericException;
-import com.example.lib.model.Role;
 import com.example.lib.model.User;
 import com.example.lib.repository.UserRepository;
-import com.example.lib.request.SignUpRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -33,7 +27,7 @@ public class UserService {
     }
 
 
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional
     public User create(User user){
         return userRepository.save(user);
     }
@@ -43,7 +37,7 @@ public class UserService {
                 .orElseThrow(notFoundUser(HttpStatus.NOT_FOUND));
     }
 
-    public UserDto getUserDto(String username) {
+    public UserDto findUser(String username) {
         var user = findUserByUsername(username);
         return UserDto.builder()
                 .id(user.getId())
@@ -52,10 +46,10 @@ public class UserService {
                 .build();
     }
 
-    public UserDto findInContextUser() {
+    public UserDto findUserInContext() {
         final Authentication authentication = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).orElseThrow(notFoundUser(HttpStatus.UNAUTHORIZED));
         final UserDetails details = Optional.ofNullable((UserDetails) authentication.getPrincipal()).orElseThrow(notFoundUser(HttpStatus.UNAUTHORIZED));
-        return getUserDto(details.getUsername());
+        return findUser(details.getUsername());
     }
 
     private static Supplier<GenericException> notFoundUser(HttpStatus unauthorized) {
