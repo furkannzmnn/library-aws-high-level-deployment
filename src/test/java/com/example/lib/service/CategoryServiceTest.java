@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class CategoryServiceTest{
+public class CategoryServiceTest extends BaseServiceTest {
 
     @InjectMocks
     private CategoryService categoryService;

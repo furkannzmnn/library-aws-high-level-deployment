@@ -26,7 +26,7 @@ public class BookRestController {
     private final UserService userService;
 
 
-    @PostMapping(name = "/save")
+    @PostMapping("/save")
     public ResponseEntity<BookListItemResponse> saveBook(@Valid @RequestBody SaveBookRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)

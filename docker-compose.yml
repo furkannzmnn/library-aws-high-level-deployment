@@ -30,9 +30,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - 8082:8082
+      - "8082:8082"
     depends_on:
       - mysqldb
+      - localstack
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb:3306/lib?useSSL=false&allowPublicKeyRetrieval=true
       - SERVER_PORT=8082
@@ -40,9 +41,11 @@ services:
       - spring.redis.port=6379
       - spring.datasource.username=root
       - spring.datasource.password=root
-    restart: always
+    restart: "no"
     networks:
       - shared-net
+    command:
+      - sh -c "aws-setup.sh"
 
   localstack:
     image: localstack/localstack:latest
