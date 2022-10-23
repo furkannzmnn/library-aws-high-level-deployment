@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class BookUpdateServiceTest {
+public class BookUpdateServiceTest extends BaseServiceTest {
 
     @InjectMocks
     private BookUpdateService bookUpdateService;

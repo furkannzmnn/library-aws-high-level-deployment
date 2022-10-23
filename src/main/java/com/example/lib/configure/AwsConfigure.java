@@ -12,6 +12,7 @@ import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class AwsConfigure {
     public static final String REGION = "eu-west-3";
     private final Map<String, String> secretCache = new LinkedHashMap<>();
@@ -55,6 +57,7 @@ public class AwsConfigure {
         ObjectMapper m = new ObjectMapper();
         Map<String, String>  read = m.readValue(secret, Map.class);
         read.forEach((key, value) -> {
+            log.info("Read " + key + ": " + value);
             secretCache.put("accessKey", key);
             secretCache.put("secretKey", value);
         });

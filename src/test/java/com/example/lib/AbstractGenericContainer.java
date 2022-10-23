@@ -45,6 +45,7 @@ public abstract class AbstractGenericContainer {
             localStackContainer.execInContainer("aws", "configure", "set", "region", LOCALSTACK_REGION);
             localStackContainer.execInContainer("aws", "configure", "set", "output", "json");// create secretmanager secret
             localStackContainer.execInContainer("aws", "--endpoint-url=http://0.0.0.0:" + 4566, "secretsmanager", "create-secret", "--name", "aws/secret", "--secret-string", "{\"accessKey\":\"" + LOCALSTACK_ACCESS_KEY + "\",\"secretKey\":\"" + LOCALSTACK_SECRET_KEY + "\"}");
+            localStackContainer.execInContainer("aws","--endpoint-url=http://0.0.0.0:" + 4566,"s3api","create-bucket","--bucket","library-folksdev","--region","eu-west-1","--create-bucket-configuration","LocationConstraint=eu-west-3");
              return "cloud.aws.secrets-manager.end-point.uri=http://localhost:" + mappedPort;
         }
 
@@ -56,6 +57,7 @@ public abstract class AbstractGenericContainer {
 
         static LocalStackContainer localStackContainer = new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.12.17"))
                 .withServices(LocalStackContainer.Service.SECRETSMANAGER)
+                .withServices(LocalStackContainer.Service.S3)
                 .withExposedPorts(4566, 4566)
                 .waitingFor(Wait.forLogMessage("Ready.*", 1))
                 .withEnv("HOSTNAME_EXTERNAL", "localstack")

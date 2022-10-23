@@ -19,8 +19,7 @@ import java.util.Objects;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class BookImageRestControllerTest extends BaseRestControllerTest {
 
@@ -41,7 +40,7 @@ class BookImageRestControllerTest extends BaseRestControllerTest {
 
         // given - precondition or setup
         String bookId = "1";
-        String imagePath = "http://library-folksdev.s3.localhost.localstack.cloud:4566/";
+        String imagePath = "http://library-folksdev.s3.localhost.localstack.cloud:4566";
         String baseUrl = String.format(imagePath + "/%s", bookId);
 
         Long bookIdValue = 1L;
@@ -60,6 +59,7 @@ class BookImageRestControllerTest extends BaseRestControllerTest {
                         .param("bookId", bookId))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(baseUrl))
                 .andExpect(content().string(baseUrl));
 
     }
