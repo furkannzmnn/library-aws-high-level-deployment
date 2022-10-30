@@ -3,23 +3,21 @@ package com.example.lib.service;
 import com.example.lib.dto.ErrorCode;
 import com.example.lib.dto.TokenResponseDTO;
 import com.example.lib.dto.UserDto;
+import com.example.lib.dto.request.LoginRequest;
+import com.example.lib.dto.request.SignUpRequest;
 import com.example.lib.exception.GenericException;
 import com.example.lib.model.Role;
 import com.example.lib.model.User;
-import com.example.lib.dto.request.LoginRequest;
-import com.example.lib.dto.request.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +48,10 @@ public class AuthService {
     public UserDto signup(SignUpRequest signUpRequest){
         var isAllReadyRegistered = userService.existsByUsername(signUpRequest.getUsername());
 
-        if(isAllReadyRegistered) throw GenericException.builder().httpStatus(HttpStatus.FOUND)
-                .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
+        if(isAllReadyRegistered) {
+            throw GenericException.builder().httpStatus(HttpStatus.FOUND)
+                    .errorMessage("Username" + signUpRequest.getUsername() + "is already used").build();
+        }
 
         var user = User.builder()
                 .username(signUpRequest.getUsername())
