@@ -15,16 +15,6 @@ import java.io.File;
 public class LibApplication {
 
     public static void main(String[] args) {
-        File file = new File("init-aws.sh");
-        // run the shell script
-        try {
-            ProcessBuilder pb = new ProcessBuilder("sh", file.getAbsolutePath());
-            Process p = pb.start();
-            p.waitFor();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         SpringApplication.run(LibApplication.class, args);
     }
 
