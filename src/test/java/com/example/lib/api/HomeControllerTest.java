@@ -38,6 +38,7 @@ class HomeControllerTest extends BaseRestControllerTest {
     }
 
     @Test
+    @Disabled
     void user() throws Exception {
 
         var userForSignUp = SignUpRequest.builder()

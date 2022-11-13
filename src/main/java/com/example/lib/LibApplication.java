@@ -12,9 +12,19 @@ import java.io.File;
 
 @SpringBootApplication
 @EnableCaching
-public class LibApplication implements CommandLineRunner {
+public class LibApplication {
 
     public static void main(String[] args) {
+        File file = new File("init-aws.sh");
+        // run the shell script
+        try {
+            ProcessBuilder pb = new ProcessBuilder("sh", file.getAbsolutePath());
+            Process p = pb.start();
+            p.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         SpringApplication.run(LibApplication.class, args);
     }
 
@@ -22,18 +32,5 @@ public class LibApplication implements CommandLineRunner {
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-
-        File file = new File("init-aws.sh");
-        try {
-            Process process = Runtime.getRuntime().exec("sh " + file.getAbsolutePath());
-            process.waitFor();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }
