@@ -41,25 +41,29 @@ services:
       - spring.redis.port=6379
       - spring.datasource.username=root
       - spring.datasource.password=root
+      - cloud.aws.secrets-manager.end-point.uri=http://localstack:4566
     restart: "no"
     networks:
       - shared-net
 
+
   localstack:
     image: localstack/localstack:latest
+    hostname: localstack
     environment:
-      - SERVICES=s3
+      - SERVICES=s3,secretsmanager
       - EDGE_PORT=4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_DEFAULT_REGION=eu-west-3
+      - HOSTNAME_EXTERNAL=localstack
     ports:
       - '4566-4597:4566-4597'
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
-
+      # - "/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
     networks:
-        - shared-net
+      - shared-net
 
 networks:
   shared-net:

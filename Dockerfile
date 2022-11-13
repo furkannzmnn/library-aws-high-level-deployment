@@ -15,5 +15,3 @@ RUN aws configure set default.region us-west-3
 
 ENTRYPOINT ["java","-jar","/lib-0.0.1-SNAPSHOT.jar"]
 
-
-
