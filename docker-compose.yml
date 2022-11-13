@@ -46,6 +46,7 @@ services:
     networks:
       - shared-net
 
+
   localstack:
     image: localstack/localstack:latest
     hostname: localstack
@@ -60,7 +61,7 @@ services:
       - '4566-4597:4566-4597'
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
-      - "/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+      # - "/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
     networks:
       - shared-net
 
