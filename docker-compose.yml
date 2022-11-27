@@ -61,7 +61,6 @@ services:
       - '4566-4597:4566-4597'
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
-      # - "/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
     networks:
       - shared-net
 

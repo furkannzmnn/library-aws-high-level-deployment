@@ -26,47 +26,21 @@ import java.util.Map;
 @Slf4j
 public class AwsConfigure {
     public static final String REGION = "eu-west-3";
-    private final Map<String, String> secretCache = new LinkedHashMap<>();
+
+    @Value("${cloud.aws.accesskey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.secretkey}")
+    private String secretKey;
 
     @Value("${cloud.aws.end-point.uri}")
     private String s3Url;
 
-    @Value("${cloud.aws.secrets-manager.end-point.uri}")
-    private String secretManagerUrl;
-
-
-    @SuppressWarnings("unchecked")
-    @PostConstruct
-    public void init() throws JsonProcessingException {
-        String secretName = "aws/secret";
-        String region = "eu-west-3";
-
-        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
-                .withEndpointConfiguration(new EndpointConfiguration(secretManagerUrl, region))
-                .build();
-
-        String secret;
-        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
-                .withSecretId(secretName);
-        GetSecretValueResult getSecretValueResult;
-
-        getSecretValueResult = client.getSecretValue(getSecretValueRequest);
-
-        secret = getSecretValueResult.getSecretString();
-
-        ObjectMapper m = new ObjectMapper();
-        Map<String, String>  read = m.readValue(secret, Map.class);
-        read.forEach((key, value) -> {
-            log.info("Read " + key + ": " + value);
-            secretCache.put("accessKey", key);
-            secretCache.put("secretKey", value);
-        });
-    }
 
     @Bean
     public AmazonS3 s3Client() {
         return AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(secretCache.get("accessKey"), secretCache.get("secretKey"))))
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .withEndpointConfiguration(getEndpointConfiguration(s3Url))
                 .build();
     }
