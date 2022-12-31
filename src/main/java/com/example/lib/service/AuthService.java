@@ -9,6 +9,9 @@ import com.example.lib.exception.GenericException;
 import com.example.lib.model.Role;
 import com.example.lib.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AdvisedSupport;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,10 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.InvocationTargetException;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService{
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;

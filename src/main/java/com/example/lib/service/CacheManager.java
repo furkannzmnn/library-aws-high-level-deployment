@@ -1,5 +1,6 @@
 package com.example.lib.service;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -39,7 +40,7 @@ public class CacheManager implements CacheClient {
     public void deleteAll(List<String> keys) {
         int retry = 0;
         try (Jedis jedis = pool.getResource()) {
-            while(retry < 3) {
+            while (retry < 3) {
                 try {
                     jedis.del(keys.toArray(new String[0]));
                     break;
