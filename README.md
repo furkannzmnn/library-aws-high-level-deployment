@@ -1,3 +1,6 @@
+![Diagram](https://i.hizliresim.com/bcmuygp.png)
+
+
 Uygulamayı çalıştırmak için aşağıdaki adımları takip ediniz.
 
 1 ) AWS CLI indirin. https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
